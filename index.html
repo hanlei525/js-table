@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>营业管理-本班数据</title>
+    <link rel="stylesheet" href="http://hanlei.online/Onlineaddress/layui-v2.4.3/layui/css/layui.css" media="all">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <style>
+        .layui-form-item-text {
+            text-align: center;
+            line-height: 38px;
+            background: #e8e4e4;
+            font-size: 18px;
+            margin-bottom: 0;
+            color: #5f5d5d;
+        }
+
+        table {
+            text-align: center;
+        }
+
+        .layui-table th {
+            text-align: center;
+        }
+
+        .layui-btn {
+            float: left;
+            margin-top: 10px;
+        }
+
+        .layui-table thead tr {
+            background: #fff;
+        }
+
+        .layui-table tbody tr:hover {
+            background: #fff;
+        }
+
+        .layui-table {
+            margin: 0;
+        }
+
+        .layui-bg-green {
+            margin-top: 5px;
+        }
+
+        .layui-form-add {
+            min-height: 70px;
+            border: 0;
+        }
+
+        .layui-form-item.layui-form-item-add.tttttt {
+            width: 35%;
+        }
+
+        .layui-form-item.layui-form-item-add.tttttt .layui-form-label-add {
+            width: 20%;
+        }
+
+        .layui-form-item.layui-form-item-add.tttttt .layui-input-block-add {
+            width: 30%;
+            margin-left: 2%;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header" id="title-header">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>xxx统计</legend>
+                    </fieldset>
+                </div>
+                <div class="layui-card-body">
+                    <form class="layui-form layui-form-add" action="" lay-filter="">
+                        <button type="button" class="layui-btn layui-btn-primary" id="excelBtn">导出</button>
+                    </form>
+                    <table class="layui-table" id="backViewTable">
+                        <colgroup>
+                            <col width="22.3%">
+                            <col width="22.3%">
+                            <col width="22.3%">
+                            <col width="22.3%">
+                        </colgroup>
+                        <th colspan="4" class="layui-form-item layui-form-item-text">暗属性统计</th>
+                        <div class="layui-form">
+                            <tr>
+                                <th>a名称</th>
+                                <td>aaa</td>
+                                <th>a编号</th>
+                                <td>aaa</td>
+                            </tr>
+                            <tr>
+                                <th>b名称</th>
+                                <td>bbb</td>
+                                <th>b编号</th>
+                                <td>bbb</td>
+                            </tr>
+                            <tr>
+                                <th>开始时间</th>
+                                <td>bbb</td>
+                                <th>结束时间</th>
+                                <td>sad</td>
+                            </tr>
+                        </div>
+
+                        <th colspan="4" class="layui-form-item layui-form-item-text">光属性统计</th>
+                        <div class="layui-form">
+                            <tr>
+                                <th colspan="2">交易分类</th>
+                                <th colspan="2">金额（元）</th>
+                            <tr>
+                                <th colspan="2">临时消费</th>
+                                <td colspan="2">22</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">充值金额</th>
+                                <td colspan="2">11</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">修正充值</th>
+                                <td colspan="2">33</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">本金退款</th>
+                                <td colspan="2">44</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">赠金退款</th>
+                                <td colspan="2">55</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">修正赠送</th>
+                                <td colspan="2">66</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">合计</th>
+                                <td colspan="2">more</td>
+                            </tr>
+                        </div>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<script src="layui/layui.js" charset="utf-8"></script>-->
+
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+
+    document.getElementById('excelBtn').onclick = () => {
+        exportExcel.exports(backViewTable);
+    };
+
+    var filename = "上班统计";
+    class ExportExcel {
+        constructor() {
+            this.idTmr = null;
+            this.uri = 'data:application/vnd.ms-excel;base64,';
+            this.template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" ' +
+                    'xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8">' +
+                    '<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions>' +
+                    '<x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' +
+                    ' <style type="text/css">' +
+                    'table td,table th {' +
+                    'width: 200px;' +
+                    'height: 30px;' +
+                    ' text-align: center;' +
+                    ' }' +
+                    '</style>' +
+                    '</head><body><table>{table}</table></body></html>';
+        }
+        getBrowser() {
+            var explorer = window.navigator.userAgent;
+            //ie
+            if (explorer.indexOf("Trident") >= 0) {
+                return 'ie';
+            }
+            //firefox
+            else if (explorer.indexOf("Firefox") >= 0) {
+                return 'Firefox';
+            }
+            //Chrome
+            else if (explorer.indexOf("Chrome") >= 0) {
+                return 'Chrome';
+            }
+            //Opera
+            else if (explorer.indexOf("Opera") >= 0) {
+                return 'Opera';
+            }
+            //Safari
+            else if (explorer.indexOf("Safari") >= 0) {
+                return 'Safari';
+            }
+        };
+        exports(tableid) {
+            if (this.getBrowser() == 'ie') {
+                var curTbl = document.getElementById(tableid);
+                var oXL = new ActiveXObject("Excel.Application");
+                var oWB = oXL.Workbooks.Add();
+                var xlsheet = oWB.Worksheets(1);
+                var sel = document.body.createTextRange();
+                sel.moveToElementText(curTbl);
+                sel.select();
+                sel.execCommand("Copy");
+                xlsheet.Paste();
+                oXL.Visible = true;
+
+                try {
+                    var fname = oXL.Application.GetSaveAsFilename( filename + "Excel.xls", "Excel Spreadsheets (*.xls), *.xls");
+                } catch (e) {
+                    alert(e);
+                } finally {
+                    oWB.SaveAs(fname);
+                    oWB.Close(savechanges = false);
+                    oXL.Quit();
+                    oXL = null;
+                    this.idTmr = window.setInterval("Cleanup();", 1);
+                }
+            } else {
+                this.openExport(tableid)
+            }
+        };
+        openExport(table, name) {
+            if (!table.nodeType) {
+                table = document.getElementById(table)
+            }
+            var ctx = {
+                worksheet: name || 'Worksheet',
+                table: table.innerHTML
+            };
+            var a = document.createElement("a");
+            a.download = filename;
+            a.href = this.uri + this.base64(this.format(this.template, ctx));
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            // window.location.href = this.uri + this.base64(this.format(this.template, ctx));
+        };
+        base64(s) {
+            return window.btoa(unescape(encodeURIComponent(s)))
+        };
+        format(s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) {
+                return c[p];
+            });
+        };
+    }
+    var exportExcel = new ExportExcel();
+
+</script>
+</body>
+</html>

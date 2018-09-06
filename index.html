@@ -158,8 +158,9 @@
     document.getElementById('excelBtn').onclick = () => {
         exportExcel.exports(backViewTable);
     };
-
+// 设置自定义文件名，需要加.xls保证即使导出文件有扩展名
     var filename = "xx数据统计.xls";
+
     class ExportExcel {
         constructor() {
             this.idTmr = null;
@@ -168,6 +169,9 @@
                     'xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8">' +
                     '<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions>' +
                     '<x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' +
+
+
+// 自定义table样式，可以将样式导出到excal表格
                     ' <style type="text/css">' +
                     'table td,table th {' +
                     'width: 200px;' +
@@ -175,11 +179,18 @@
                     ' text-align: center;' +
                     ' }' +
                     '</style>' +
+
+
+
+
                     '</head><body><table>{table}</table></body></html>';
         }
+
+
+        // 兼容各大主流浏览器
         getBrowser() {
             var explorer = window.navigator.userAgent;
-            //ie
+            //ie 
             if (explorer.indexOf("Trident") >= 0) {
                 return 'ie';
             }
